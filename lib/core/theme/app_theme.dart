@@ -6,6 +6,20 @@ import 'app_colors.dart';
 class AppTheme {
   AppTheme._();
 
+  static final TextTheme _robotoBase = GoogleFonts.robotoTextTheme();
+
+  static TextStyle _robotoStyle({
+    required Color color,
+    double? fontSize,
+    FontWeight? fontWeight,
+  }) {
+    return (_robotoBase.bodyMedium ?? const TextStyle()).copyWith(
+      color: color,
+      fontSize: fontSize,
+      fontWeight: fontWeight,
+    );
+  }
+
   // ── Dark Theme ──
   static ThemeData get darkTheme {
     return ThemeData(
@@ -27,10 +41,10 @@ class AppTheme {
         elevation: 0,
         scrolledUnderElevation: 0,
         centerTitle: false,
-        titleTextStyle: GoogleFonts.roboto(
+        titleTextStyle: _robotoStyle(
+          color: AppColors.darkTextPrimary,
           fontSize: 22,
           fontWeight: FontWeight.w700,
-          color: AppColors.darkTextPrimary,
         ),
       ),
       cardTheme: CardThemeData(
@@ -71,7 +85,7 @@ class AppTheme {
           color: AppColors.darkTextTertiary,
           fontSize: 14,
         ),
-        labelStyle: GoogleFonts.roboto(
+        labelStyle: _robotoStyle(
           color: AppColors.darkTextSecondary,
           fontSize: 14,
         ),
@@ -108,7 +122,8 @@ class AppTheme {
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
           foregroundColor: AppColors.accent,
-          textStyle: GoogleFonts.roboto(
+          textStyle: _robotoStyle(
+            color: AppColors.accent,
             fontSize: 14,
             fontWeight: FontWeight.w600,
           ),
@@ -132,7 +147,7 @@ class AppTheme {
       ),
       snackBarTheme: SnackBarThemeData(
         backgroundColor: AppColors.darkSurfaceLight,
-        contentTextStyle: GoogleFonts.roboto(
+        contentTextStyle: _robotoStyle(
           color: AppColors.darkTextPrimary,
           fontSize: 14,
         ),
@@ -185,10 +200,10 @@ class AppTheme {
         elevation: 0,
         scrolledUnderElevation: 0,
         centerTitle: false,
-        titleTextStyle: GoogleFonts.roboto(
+        titleTextStyle: _robotoStyle(
+          color: AppColors.lightTextPrimary,
           fontSize: 22,
           fontWeight: FontWeight.w700,
-          color: AppColors.lightTextPrimary,
         ),
       ),
       cardTheme: CardThemeData(
@@ -229,7 +244,7 @@ class AppTheme {
           color: AppColors.lightTextTertiary,
           fontSize: 14,
         ),
-        labelStyle: GoogleFonts.roboto(
+        labelStyle: _robotoStyle(
           color: AppColors.lightTextSecondary,
           fontSize: 14,
         ),
@@ -266,7 +281,8 @@ class AppTheme {
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
           foregroundColor: AppColors.accent,
-          textStyle: GoogleFonts.roboto(
+          textStyle: _robotoStyle(
+            color: AppColors.accent,
             fontSize: 14,
             fontWeight: FontWeight.w600,
           ),
@@ -290,7 +306,7 @@ class AppTheme {
       ),
       snackBarTheme: SnackBarThemeData(
         backgroundColor: AppColors.lightSurface,
-        contentTextStyle: GoogleFonts.roboto(
+        contentTextStyle: _robotoStyle(
           color: AppColors.lightTextPrimary,
           fontSize: 14,
         ),
@@ -331,70 +347,70 @@ class AppTheme {
         : AppColors.lightTextSecondary;
 
     return TextTheme(
-      displayLarge: GoogleFonts.roboto(
+      displayLarge: _robotoStyle(
+        color: color,
         fontSize: 32,
         fontWeight: FontWeight.w700,
-        color: color,
       ),
-      displayMedium: GoogleFonts.roboto(
+      displayMedium: _robotoStyle(
+        color: color,
         fontSize: 28,
         fontWeight: FontWeight.w700,
-        color: color,
       ),
-      headlineLarge: GoogleFonts.roboto(
+      headlineLarge: _robotoStyle(
+        color: color,
         fontSize: 24,
         fontWeight: FontWeight.w700,
-        color: color,
       ),
-      headlineMedium: GoogleFonts.roboto(
+      headlineMedium: _robotoStyle(
+        color: color,
         fontSize: 20,
         fontWeight: FontWeight.w600,
-        color: color,
       ),
-      titleLarge: GoogleFonts.roboto(
+      titleLarge: _robotoStyle(
+        color: color,
         fontSize: 18,
         fontWeight: FontWeight.w600,
-        color: color,
       ),
-      titleMedium: GoogleFonts.roboto(
+      titleMedium: _robotoStyle(
+        color: color,
         fontSize: 16,
         fontWeight: FontWeight.w600,
-        color: color,
       ),
-      titleSmall: GoogleFonts.roboto(
+      titleSmall: _robotoStyle(
+        color: color,
         fontSize: 14,
         fontWeight: FontWeight.w600,
-        color: color,
       ),
-      bodyLarge: GoogleFonts.roboto(
+      bodyLarge: _robotoStyle(
+        color: color,
         fontSize: 16,
         fontWeight: FontWeight.w400,
-        color: color,
       ),
-      bodyMedium: GoogleFonts.roboto(
+      bodyMedium: _robotoStyle(
+        color: color,
         fontSize: 14,
         fontWeight: FontWeight.w400,
-        color: color,
       ),
-      bodySmall: GoogleFonts.roboto(
+      bodySmall: _robotoStyle(
+        color: secondaryColor,
         fontSize: 12,
         fontWeight: FontWeight.w400,
-        color: secondaryColor,
       ),
-      labelLarge: GoogleFonts.roboto(
+      labelLarge: _robotoStyle(
+        color: color,
         fontSize: 14,
         fontWeight: FontWeight.w600,
-        color: color,
       ),
-      labelMedium: GoogleFonts.roboto(
+      labelMedium: _robotoStyle(
+        color: secondaryColor,
         fontSize: 12,
         fontWeight: FontWeight.w500,
-        color: secondaryColor,
       ),
-      labelSmall: GoogleFonts.roboto(
+      labelSmall: _robotoStyle(
+        color: secondaryColor,
         fontSize: 11,
         fontWeight: FontWeight.w500,
-        color: secondaryColor,
       ),
     );
   }

@@ -34,7 +34,8 @@ migrate_working_dir/
 .pub/
 /build/
 /coverage/
-
+.agents/
+.github/
 # Environment files (keep secrets out of git)
 .env
 .env.*

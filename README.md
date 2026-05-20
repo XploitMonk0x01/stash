@@ -10,6 +10,17 @@ It utilizes Firebase for authentication and database synchronization (with full 
 
 ## 1. Local Development
 
+### Firestore Composite Indexes
+
+Some queries combine filters with ordering (for example, `is_favourite` or
+`category` with `created_at`). Firestore may require composite indexes for
+these. If you see `failed-precondition` errors with an index link, create the
+index in the Firebase Console. Common indexes for this app include:
+
+- `users/{uid}/links`: `is_archived` + `created_at` (descending)
+- `users/{uid}/links`: `category` + `is_archived` + `created_at` (descending)
+- `users/{uid}/links`: `is_favourite` + `is_archived` + `created_at` (descending)
+
 Follow these steps to get the app running locally in minutes.
 
 ### Prerequisites
@@ -172,6 +183,7 @@ All data is scoped per authenticated user.
 | `page_title`   | string    | From metadata                        |
 | `created_at`   | timestamp | Stored as Firestore `Timestamp`      |
 | `is_favourite` | bool      | Favourite toggle                     |
+| `is_archived`  | bool      | Soft-delete/archive flag             |
 
 ### `users/{uid}/categories/{categoryId}` fields
 

@@ -18,6 +18,14 @@ class LinkRepository {
 
   LinkRepository({required this.firestore, required this.auth});
 
+  Future<T> _guard<T>(Future<T> Function() action, String label) async {
+    try {
+      return await action();
+    } catch (e) {
+      throw Exception('$label failed: $e');
+    }
+  }
+
   String get _uid {
     final user = auth.currentUser;
     if (user == null) throw Exception('User not authenticated');
@@ -31,25 +39,60 @@ class LinkRepository {
 
   /// Add a new link
   Future<String> addLink(LinkModel link) async {
-    final doc = _linksRef.doc();
-    final linkWithId = link.copyWith(id: doc.id);
-    await doc.set(linkWithId.toFirestore());
-    return doc.id;
+    return _guard(() async {
+      final doc = _linksRef.doc();
+      final linkWithId = link.copyWith(id: doc.id);
+      await doc.set(linkWithId.toFirestore());
+      return doc.id;
+    }, 'Add link');
   }
 
   /// Update an existing link
   Future<void> updateLink(String linkId, Map<String, dynamic> updates) async {
-    await _linksRef.doc(linkId).update(updates);
+    await _guard(
+      () => _linksRef.doc(linkId).update(updates),
+      'Update link',
+    );
   }
 
   /// Delete a link
   Future<void> deleteLink(String linkId) async {
-    await _linksRef.doc(linkId).delete();
+    await _guard(
+      () => _linksRef.doc(linkId).delete(),
+      'Delete link',
+    );
+  }
+
+  /// Soft-delete (archive) a link
+  Future<void> archiveLink(String linkId) async {
+    await _guard(
+      () => _linksRef.doc(linkId).update({'is_archived': true}),
+      'Archive link',
+    );
+  }
+
+  /// Restore an archived link
+  Future<void> unarchiveLink(String linkId) async {
+    await _guard(
+      () => _linksRef.doc(linkId).update({'is_archived': false}),
+      'Unarchive link',
+    );
+  }
+
+  /// Restore a previously deleted link using its original id.
+  Future<void> restoreLink(LinkModel link) async {
+    await _guard(
+      () => _linksRef.doc(link.id).set(link.toFirestore()),
+      'Restore link',
+    );
   }
 
   /// Toggle favourite status
   Future<void> toggleFavourite(String linkId, bool isFavourite) async {
-    await _linksRef.doc(linkId).update({'is_favourite': isFavourite});
+    await _guard(
+      () => _linksRef.doc(linkId).update({'is_favourite': isFavourite}),
+      'Toggle favourite',
+    );
   }
 
   /// Get a stream of all links, optionally filtered
@@ -77,6 +120,8 @@ class LinkRepository {
   }) async {
     Query query = _linksQuery;
 
+    query = query.where('is_archived', isEqualTo: false);
+
     if (category != null && category.isNotEmpty) {
       query = query.where('category', isEqualTo: category);
     }
@@ -102,7 +147,10 @@ class LinkRepository {
 
   /// Get total link count for the current user
   Future<int> getLinkCount() async {
-    final snapshot = await _linksRef.count().get();
+    final snapshot = await _linksRef
+        .where('is_archived', isEqualTo: false)
+        .count()
+        .get();
     return snapshot.count ?? 0;
   }
 
@@ -110,6 +158,7 @@ class LinkRepository {
   Future<int> getCategoryLinkCount(String category) async {
     final snapshot = await _linksRef
         .where('category', isEqualTo: category)
+        .where('is_archived', isEqualTo: false)
         .count()
         .get();
     return snapshot.count ?? 0;

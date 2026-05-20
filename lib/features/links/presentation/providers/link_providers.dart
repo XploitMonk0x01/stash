@@ -18,7 +18,7 @@ final filteredLinksProvider = StreamProvider<List<LinkModel>>((ref) {
   final favouritesOnly = ref.watch(favouritesOnlyProvider);
 
   return repository.watchLinks().map((links) {
-    Iterable<LinkModel> filtered = links;
+    Iterable<LinkModel> filtered = links.where((l) => !l.isArchived);
     if (category != null && category.isNotEmpty) {
       filtered = filtered.where((l) => l.category == category);
     }

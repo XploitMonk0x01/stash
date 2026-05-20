@@ -10,6 +10,7 @@ class LinkModel {
   final String pageTitle;
   final DateTime createdAt;
   final bool isFavourite;
+  final bool isArchived;
 
   const LinkModel({
     required this.id,
@@ -20,6 +21,7 @@ class LinkModel {
     this.pageTitle = '',
     required this.createdAt,
     this.isFavourite = false,
+    this.isArchived = false,
   });
 
   factory LinkModel.fromFirestore(DocumentSnapshot doc) {
@@ -33,6 +35,7 @@ class LinkModel {
       pageTitle: data['page_title'] ?? '',
       createdAt: (data['created_at'] as Timestamp?)?.toDate() ?? DateTime.now(),
       isFavourite: data['is_favourite'] ?? false,
+      isArchived: data['is_archived'] ?? false,
     );
   }
 
@@ -45,6 +48,7 @@ class LinkModel {
       'page_title': pageTitle,
       'created_at': Timestamp.fromDate(createdAt),
       'is_favourite': isFavourite,
+      'is_archived': isArchived,
     };
   }
 
@@ -57,6 +61,7 @@ class LinkModel {
     String? pageTitle,
     DateTime? createdAt,
     bool? isFavourite,
+    bool? isArchived,
   }) {
     return LinkModel(
       id: id ?? this.id,
@@ -67,6 +72,7 @@ class LinkModel {
       pageTitle: pageTitle ?? this.pageTitle,
       createdAt: createdAt ?? this.createdAt,
       isFavourite: isFavourite ?? this.isFavourite,
+      isArchived: isArchived ?? this.isArchived,
     );
   }
 }

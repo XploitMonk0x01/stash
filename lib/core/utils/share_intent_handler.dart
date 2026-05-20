@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:share_handler/share_handler.dart';
+import 'url_validator.dart';
 
 /// Handles incoming share intents from other apps
 class ShareIntentHandler {
@@ -36,11 +37,10 @@ class ShareIntentHandler {
         caseSensitive: false,
       );
       final match = urlPattern.firstMatch(content);
-      if (match != null) {
-        sharedUrl.value = match.group(0);
-      } else {
-        // The whole content might be a URL
-        sharedUrl.value = content;
+      String candidate = match?.group(0) ?? content;
+      candidate = candidate.trim();
+      if (UrlValidator.isValidUrl(candidate)) {
+        sharedUrl.value = UrlValidator.sanitize(candidate);
       }
     }
   }
