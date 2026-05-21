@@ -1,5 +1,5 @@
 import 'dart:isolate';
-import '../../domain/link_model.dart';
+import '../domain/link_model.dart';
 import 'metadata_service.dart';
 
 void _metadataIsolateEntry(SendPort sendPort) {
